@@ -46,8 +46,8 @@ def deploy():
         print(f"[{datetime.datetime.now()}] SUCCESS: /content_staging/ is empty. All pages have been fully deployed.")
         return
 
-    # 3. Select 15-25 files
-    num_to_deploy = random.randint(15, 25)
+    # 3. Select 50-75 files
+    num_to_deploy = random.randint(50, 75)
     files_to_deploy = random.sample(staging_files, min(num_to_deploy, len(staging_files)))
     
     print(f"Selected {len(files_to_deploy)} files to deploy.")
