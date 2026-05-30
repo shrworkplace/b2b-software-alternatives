@@ -28,8 +28,8 @@ def deploy():
     print(f"[{datetime.datetime.now()}] Triggered deployment script.")
     
     # 1. Random delay (simulating cron running unpredictably if executed strictly at 8am)
-    max_delay_seconds = 0
-    delay = 0
+    max_delay_seconds = 3 * 60 * 60
+    delay = random.randint(0, max_delay_seconds)
     print(f"[{datetime.datetime.now()}] Sleeping for {delay // 60} minutes to ensure organic timing...")
     time.sleep(delay)
     
