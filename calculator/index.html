@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Missed Call Revenue Calculator | Free Tool</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="calculator-card">
+            <div class="header">
+                <span class="badge">FREE TOOL</span>
+                <h1>Missed Call Revenue Calculator</h1>
+                <p class="subtitle">See how much revenue your business loses from unanswered calls — in seconds.</p>
+            </div>
+
+            <div class="calculator-form">
+                <!-- Industry Selector -->
+                <div class="form-group">
+                    <label>Your Industry</label>
+                    <div class="industry-selector">
+                        <button class="industry-btn" data-industry="legal">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                            </svg>
+                            Law Firm
+                        </button>
+                        <button class="industry-btn" data-industry="health">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 12h-4l-3 9-4-18-3 9H2"/>
+                            </svg>
+                            Home Health
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question 1: Missed Calls -->
+                <div class="form-group">
+                    <label>How many calls does your business miss per month? <span class="tooltip">ⓘ<span class="tooltip-text">Industry average: 8-25 for law firms, 10-40 for home health</span></span></label>
+                    <div class="slider-container">
+                        <input type="range" id="missedCalls" min="0" max="60" value="15" step="1">
+                        <div class="slider-values">
+                            <span>0</span>
+                            <span>15</span>
+                            <span>30</span>
+                            <span>45</span>
+                            <span>60+</span>
+                        </div>
+                        <div class="value-display">
+                            <span id="missedCallsValue">15</span> calls/month
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 2: Average Client Value -->
+                <div class="form-group">
+                    <label>What is your average revenue per client? <span class="tooltip">ⓘ<span class="tooltip-text">Personal injury cases: $5,000-$50,000+ | Home health referrals: $500-$2,000</span></span></label>
+                    <div class="slider-container">
+                        <input type="range" id="clientValue" min="500" max="50000" value="5000" step="100">
+                        <div class="slider-values">
+                            <span>$500</span>
+                            <span>$10k</span>
+                            <span>$20k</span>
+                            <span>$35k</span>
+                            <span>$50k+</span>
+                        </div>
+                        <div class="value-display">
+                            <span id="clientValueValue">$5,000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 3: Conversion Rate (Optional but informative) -->
+                <div class="form-group">
+                    <label>Estimated call-to-client conversion rate <span class="tooltip">ⓘ<span class="tooltip-text">Industry average: 30% for law firms, 40% for home health</span></span></label>
+                    <div class="slider-container">
+                        <input type="range" id="conversionRate" min="10" max="70" value="30" step="1">
+                        <div class="slider-values">
+                            <span>10%</span>
+                            <span>25%</span>
+                            <span>40%</span>
+                            <span>55%</span>
+                            <span>70%</span>
+                        </div>
+                        <div class="value-display">
+                            <span id="conversionRateValue">30</span>%
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-container" id="results">
+                <div class="result-card">
+                    <div class="result-header">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 8v4M12 16h.01"/>
+                        </svg>
+                        <h3>Your Monthly Revenue Loss</h3>
+                    </div>
+                    <div class="result-amount" id="monthlyLoss">$0</div>
+                    <div class="result-breakdown" id="breakdown"></div>
+                </div>
+
+                <div class="result-card">
+                    <div class="result-header">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                        </svg>
+                        <h3>Your Annual Revenue Loss</h3>
+                    </div>
+                    <div class="result-amount" id="annualLoss">$0</div>
+                </div>
+
+                <div class="result-card highlight">
+                    <div class="result-header">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                        </svg>
+                        <h3>Missed Call ROI Score</h3>
+                    </div>
+                    <div class="risk-score" id="riskScore">
+                        <div class="score-circle">
+                            <span id="scorePercentage">0</span>%
+                        </div>
+                        <p id="riskLevel">Calculate to see your score</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Section with Affiliate Link -->
+            <div class="action-section" id="actionSection">
+                <div class="divider"></div>
+                <div class="action-content">
+                    <h4>Want to stop losing revenue?</h4>
+                    <p>Law firms and home health agencies using AI voice agents answer <strong>every call, 24/7</strong> — and never miss a client again.</p>
+                    <a href="https://www.gohighlevel.com/?fp_ref=sangeetha75" class="cta-button" target="_blank" rel="noopener noreferrer">
+                        Try GoHighLevel Free for 14 Days
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                    <p class="disclaimer">No credit card required. Cancel anytime.</p>
+                </div>
+            </div>
+
+            <!-- Share Section -->
+            <div class="share-section">
+                <p>Share this tool with colleagues:</p>
+                <div class="share-buttons">
+                    <button class="share-btn" data-platform="linkedin">LinkedIn</button>
+                    <button class="share-btn" data-platform="twitter">Twitter</button>
+                    <button class="share-btn" data-platform="facebook">Facebook</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const missedCallsSlider = document.getElementById('missedCalls');
+        const clientValueSlider = document.getElementById('clientValue');
+        const conversionRateSlider = document.getElementById('conversionRate');
+        
+        const missedCallsValue = document.getElementById('missedCallsValue');
+        const clientValueValue = document.getElementById('clientValueValue');
+        const conversionRateValue = document.getElementById('conversionRateValue');
+        
+        const monthlyLossSpan = document.getElementById('monthlyLoss');
+        const annualLossSpan = document.getElementById('annualLoss');
+        const breakdownSpan = document.getElementById('breakdown');
+        const scorePercentageSpan = document.getElementById('scorePercentage');
+        const riskLevelSpan = document.getElementById('riskLevel');
+
+        let currentIndustry = 'legal';
+
+        // Industry benchmarks
+        const benchmarks = {
+            legal: {
+                name: 'Law Firm',
+                avgMissedCalls: 15,
+                avgConversion: 30,
+                avgClientValue: 5000,
+                conversionDescription: 'Law firms convert ~30% of calls into clients',
+                riskLevels: {
+                    low: { min: 0, max: 10, text: 'Low Risk', color: '#10b981' },
+                    medium: { min: 11, max: 25, text: 'Medium Risk', color: '#f59e0b' },
+                    high: { min: 26, max: 100, text: 'High Risk', color: '#ef4444' }
+                }
+            },
+            health: {
+                name: 'Home Health Agency',
+                avgMissedCalls: 20,
+                avgConversion: 40,
+                avgClientValue: 1000,
+                conversionDescription: 'Home health agencies convert ~40% of calls into referrals',
+                riskLevels: {
+                    low: { min: 0, max: 15, text: 'Low Risk', color: '#10b981' },
+                    medium: { min: 16, max: 35, text: 'Medium Risk', color: '#f59e0b' },
+                    high: { min: 36, max: 100, text: 'High Risk', color: '#ef4444' }
+                }
+            }
+        };
+
+        // Update slider displays
+        function updateDisplays() {
+            missedCallsValue.textContent = missedCallsSlider.value;
+            clientValueValue.textContent = formatCurrency(parseInt(clientValueSlider.value));
+            conversionRateValue.textContent = conversionRateSlider.value;
+        }
+
+        // Format currency
+        function formatCurrency(value) {
+            if (value >= 1000) {
+                return '$' + (value / 1000).toFixed(0) + 'k';
+            }
+            return '$' + value.toLocaleString();
+        }
+
+        function formatFullCurrency(value) {
+            return '$' + value.toLocaleString();
+        }
+
+        // Calculate and update results
+        function calculateResults() {
+            const missedCalls = parseInt(missedCallsSlider.value);
+            const clientValue = parseInt(clientValueSlider.value);
+            const conversionRate = parseInt(conversionRateSlider.value);
+            
+            const monthlyLoss = Math.round(missedCalls * (conversionRate / 100) * clientValue);
+            const annualLoss = monthlyLoss * 12;
+            
+            monthlyLossSpan.textContent = formatFullCurrency(monthlyLoss);
+            annualLossSpan.textContent = formatFullCurrency(annualLoss);
+            
+            // Breakdown text
+            breakdownSpan.innerHTML = `${missedCalls} missed calls × ${conversionRate}% conversion × ${formatFullCurrency(clientValue)} per client`;
+            
+            // Calculate risk score (percentage of max possible)
+            const benchmark = benchmarks[currentIndustry];
+            const maxLoss = 60 * (70 / 100) * 50000;
+            const riskPercentage = Math.min(Math.round((monthlyLoss / maxLoss) * 100), 100);
+            scorePercentageSpan.textContent = riskPercentage;
+            
+            // Set risk level text and color
+            let riskInfo = { text: 'Calculate to see your score', color: '#94a3b8' };
+            for (const level of Object.values(benchmark.riskLevels)) {
+                if (riskPercentage >= level.min && riskPercentage <= level.max) {
+                    riskInfo = level;
+                    break;
+                }
+            }
+            
+            riskLevelSpan.textContent = riskInfo.text;
+            riskLevelSpan.style.color = riskInfo.color;
+            scorePercentageSpan.style.color = riskInfo.color;
+            
+            // Animate the score circle
+            const circle = document.querySelector('.score-circle');
+            if (circle) {
+                circle.style.borderColor = riskInfo.color;
+            }
+        }
+
+        // Industry selector
+        const industryBtns = document.querySelectorAll('.industry-btn');
+        industryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active state
+                industryBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Update current industry
+                currentIndustry = btn.dataset.industry;
+                
+                // Update placeholders based on industry
+                const benchmark = benchmarks[currentIndustry];
+                
+                // Update slider defaults
+                missedCallsSlider.value = benchmark.avgMissedCalls;
+                clientValueSlider.value = benchmark.avgClientValue;
+                conversionRateSlider.value = benchmark.avgConversion;
+                
+                updateDisplays();
+                calculateResults();
+            });
+        });
+        
+        // Set default active industry (legal)
+        document.querySelector('.industry-btn[data-industry="legal"]').classList.add('active');
+        
+        // Add event listeners
+        missedCallsSlider.addEventListener('input', () => {
+            updateDisplays();
+            calculateResults();
+        });
+        
+        clientValueSlider.addEventListener('input', () => {
+            updateDisplays();
+            calculateResults();
+        });
+        
+        conversionRateSlider.addEventListener('input', () => {
+            updateDisplays();
+            calculateResults();
+        });
+        
+        // Share buttons
+        const shareBtns = document.querySelectorAll('.share-btn');
+        const shareUrl = encodeURIComponent(window.location.href);
+        const shareTitle = encodeURIComponent('Missed Call Revenue Calculator - See how much revenue you\'re losing');
+        
+        shareBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const platform = btn.dataset.platform;
+                let shareLink = '';
+                
+                switch(platform) {
+                    case 'linkedin':
+                        shareLink = `https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`;
+                        break;
+                    case 'twitter':
+                        shareLink = `https://twitter.com/intent/tweet?text=${shareTitle}&url=${shareUrl}`;
+                        break;
+                    case 'facebook':
+                        shareLink = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
+                        break;
+                }
+                
+                if (shareLink) {
+                    window.open(shareLink, '_blank', 'width=600,height=400');
+                }
+            });
+        });
+        
+        // Initialize
+        updateDisplays();
+        calculateResults();
+    </script>
+</body>
+</html>
